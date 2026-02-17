@@ -1,4 +1,4 @@
-.story {
+﻿.story {
     background: #0b0f19;
     color: white;
     overflow-x: hidden;
@@ -52,6 +52,9 @@
     line-height: 1.02;
     margin: 10px 0 14px;
     text-shadow: 0 12px 30px rgba(0,0,0,0.35);
+    position: relative;
+    z-index: 1;
+    will-change: clip-path;
   }
   
   .h2 {
@@ -158,16 +161,45 @@
     display: inline-block;
   }
   
-  .eatMask {
+  .introMouse {
     position: absolute;
-    top: -10px;
-    left: -10px;
-    height: calc(100% + 20px);
-    width: 0%;
-    background: rgba(0,0,0,0.55);
-    border-radius: 14px;
-    filter: blur(0.0px);
-    will-change: width;
+    top: 50%;
+    left: -200px;
+    width: clamp(300px, 46vw, 620px);
+    aspect-ratio: 3 / 2;
+    z-index: 3;
+    pointer-events: none;
+  }
+
+  .introMouseFrame {
+    position: absolute;
+    inset: 0;
+    --mouse-frame-rotate: 0deg;
+    --mouse-frame-scale: 1;
+    --mouse-frame-shift-x: 0%;
+    --mouse-frame-shift-y: 0%;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transform-origin: 50% 50%;
+    transform: translate(var(--mouse-frame-shift-x), var(--mouse-frame-shift-y))
+      rotate(var(--mouse-frame-rotate))
+      scale(var(--mouse-frame-scale));
+    will-change: opacity, transform;
+  }
+
+  .introMouseFrameRight {
+    --mouse-frame-rotate: -90deg;
+  }
+
+  .introMouseFrame3 {
+    --mouse-frame-scale: 1.14;
+    --mouse-frame-shift-y: -1%;
+  }
+
+  .introMouseFrame4 {
+    --mouse-frame-scale: 1.18;
+    --mouse-frame-shift-y: -1%;
   }
   
   .badge {

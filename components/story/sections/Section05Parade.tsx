@@ -26,19 +26,21 @@ export default function Section05Parade() {
 
       // Initial setup
       gsap.set(t, { y: 18, opacity: 0 });
-      // Piper faces left (normal image orientation, no flip)
-      gsap.set(piper, { x: offRight, opacity: 0 });
       
-      // Position notes in a line above and behind the piper
+      // PIPER LEADS - he's to the LEFT (smaller x) so he enters first and leads
+      gsap.set(piper, { x: offRight - 300, opacity: 0 });
+      
+      // Position notes to start from the flute (right side of piper, at head level)
       gsap.set(notes, { 
-        x: (i) => offRight - 200 - (i * 120), // Stagger notes in a line
+        x: (i) => offRight - 100 - (i * 65), // Closer to flute, tighter spacing
+        y: 0, // Set initial y position
         opacity: 0, 
         scale: 0.8 
       });
       
-      // Position mice in a tight line behind the piper (flipped to face left)
+      // MICE FOLLOW BEHIND - closer to the piper now
       gsap.set(miceLine, { 
-        x: (i) => offRight - 400 - (i * 180), // Stagger them behind piper
+        x: (i) => offRight + 100 + (i * 240), // Closer to piper (changed from offRight + i*240)
         opacity: 0, 
         scaleX: -1 
       });
@@ -51,7 +53,7 @@ export default function Section05Parade() {
         scrollTrigger: {
           trigger: root,
           start: "top top",
-          end: "+=170%",
+          end: "+=220%", // Increased from 170% to give more scroll distance
           scrub: true,
           pin: true,
           anticipatePin: 1,
@@ -61,52 +63,45 @@ export default function Section05Parade() {
       // Fade in text
       tl.to(t, { y: 0, opacity: 1, duration: 0.25, ease: "power2.out" }, 0.05);
       
-      // Parade enters from right and crosses to left together
-      // Piper leads the parade
+      // Parade enters from right and crosses to left together - MUCH SLOWER NOW
+      // Piper leads (enters first, stays on the left)
       tl.to(piper, { 
-        x: offLeft, 
+        x: offLeft - 300, 
         opacity: 1, 
-        duration: 1.2, 
+        duration: 2.5, // Increased from 1.2 to 2.5 for slower movement
         ease: "none" 
       }, 0.15);
 
-      // Notes follow above the piper in formation
+      // Notes flow from the flute as the piper moves
       tl.to(notes, {
-        x: (i) => offLeft - 200 - (i * 120), // Keep the same spacing as they move
+        x: (i) => offLeft - 100 - (i * 65), // Adjusted to be closer to flute
         opacity: 1,
         scale: 1,
-        duration: 1.2,
+        duration: 2.5, // Increased from 1.2 to 2.5
         ease: "none",
       }, 0.15);
+      
+      // Keep notes visible for the rest of the animation
+      tl.to(notes, { opacity: 1 }, "+=0");
 
-      // Mice follow behind in tight formation
+      // Mice follow behind - closer to piper
       tl.to(miceLine, {
-        x: (i) => offLeft - 400 - (i * 180), // Keep the same spacing as they move
+        x: (i) => offLeft + 100 + (i * 240), // Keep same spacing
         opacity: 1,
-        duration: 1.2,
+        duration: 2.5, // Increased from 1.2 to 2.5
         ease: "none",
       }, 0.15);
 
-      // Floating animation for notes (happens continuously)
+      // Floating animation for notes (only y-axis to avoid conflict with scrubbed x animation)
       notes.forEach((el, i) => {
-        // Each note floats up and down gently
+        // Each note floats up and down gently and smoothly
         gsap.to(el, { 
-          y: "-=20", 
-          duration: 1.0 + i * 0.1, 
+          y: "-=18", 
+          duration: 1.3 + i * 0.12, 
           yoyo: true, 
           repeat: -1, 
           ease: "sine.inOut",
-          delay: i * 0.08 
-        });
-        
-        // Also add a gentle horizontal wave
-        gsap.to(el, { 
-          x: "+=10", 
-          duration: 1.3 + i * 0.15, 
-          yoyo: true, 
-          repeat: -1, 
-          ease: "sine.inOut",
-          delay: i * 0.12 
+          delay: i * 0.1 
         });
       });
 
@@ -129,11 +124,11 @@ export default function Section05Parade() {
         </p>
       </div>
 
-      {/* Piper leading the parade */}
+      {/* Piper leading the parade - MUCH BIGGER */}
       <div
         data-el="piper"
         className={styles.photoWrap}
-        style={{ bottom: "8%", left: "50%", width: 280, height: 380, zIndex: 3 }}
+        style={{ bottom: "4%", left: "50%", width: 420, height: 560, zIndex: 3 }}
       >
         <img
           className={styles.photoAsset}
@@ -163,11 +158,11 @@ export default function Section05Parade() {
         />
       </div>
 
-      {/* Mice parade following the piper in a line */}
+      {/* Mice parade following the piper in a line - EVEN BIGGER */}
       <div
         data-el="miceLine"
         className={styles.photoWrap}
-        style={{ bottom: "7%", left: "50%", width: 180, height: 120, zIndex: 2 }}
+        style={{ bottom: "5%", left: "50%", width: 360, height: 240, zIndex: 2 }}
       >
         <img
           className={styles.photoAsset}
@@ -179,7 +174,7 @@ export default function Section05Parade() {
       <div
         data-el="miceLine"
         className={styles.photoWrap}
-        style={{ bottom: "7%", left: "50%", width: 180, height: 120, zIndex: 2 }}
+        style={{ bottom: "5%", left: "50%", width: 360, height: 240, zIndex: 2 }}
       >
         <img
           className={styles.photoAsset}
@@ -191,7 +186,7 @@ export default function Section05Parade() {
       <div
         data-el="miceLine"
         className={styles.photoWrap}
-        style={{ bottom: "7%", left: "50%", width: 180, height: 120, zIndex: 2 }}
+        style={{ bottom: "5%", left: "50%", width: 360, height: 240, zIndex: 2 }}
       >
         <img
           className={styles.photoAsset}
@@ -201,19 +196,10 @@ export default function Section05Parade() {
         />
       </div>
 
-      {/* Musical notes floating above the piper in a line */}
+      {/* Musical notes flowing from the flute - positioned higher */}
       <div data-el="note">
         <PlaceholderAsset 
           label="♪" 
-          kind="circle" 
-          w={60} 
-          h={60} 
-          style={{ top: "12%", left: "50%", zIndex: 4 }} 
-        />
-      </div>
-      <div data-el="note">
-        <PlaceholderAsset 
-          label="♫" 
           kind="circle" 
           w={50} 
           h={50} 
@@ -222,20 +208,29 @@ export default function Section05Parade() {
       </div>
       <div data-el="note">
         <PlaceholderAsset 
+          label="♫" 
+          kind="circle" 
+          w={45} 
+          h={45} 
+          style={{ top: "8%", left: "50%", zIndex: 4 }} 
+        />
+      </div>
+      <div data-el="note">
+        <PlaceholderAsset 
           label="♪" 
           kind="circle" 
-          w={55} 
-          h={55} 
-          style={{ top: "14%", left: "50%", zIndex: 4 }} 
+          w={48} 
+          h={48} 
+          style={{ top: "12%", left: "50%", zIndex: 4 }} 
         />
       </div>
       <div data-el="note">
         <PlaceholderAsset 
           label="♫" 
           kind="circle" 
-          w={65} 
-          h={65} 
-          style={{ top: "11%", left: "50%", zIndex: 4 }} 
+          w={52} 
+          h={52} 
+          style={{ top: "6%", left: "50%", zIndex: 4 }} 
         />
       </div>
     </SectionFrame>
