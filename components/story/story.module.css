@@ -22,22 +22,48 @@
     will-change: transform;
   }
   
-  .overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      to bottom,
-      rgba(0,0,0,0.45),
-      rgba(0,0,0,0.35) 45%,
-      rgba(0,0,0,0.55)
-    );
-  }
-  
   .content {
     position: relative;
     width: min(1100px, 92vw);
     padding: clamp(16px, 3vw, 32px);
     z-index: 2;
+  }
+
+  .introContent {
+    min-height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  .introPanel {
+    position: relative;
+    width: min(760px, 100%);
+    padding: clamp(18px, 3.4vw, 34px);
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    background: linear-gradient(
+      135deg,
+      rgba(18, 29, 47, 0.64),
+      rgba(18, 29, 47, 0.44)
+    );
+    box-shadow: 0 20px 50px rgba(8, 14, 23, 0.34);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  .introKicker {
+    display: inline-flex;
+    align-items: center;
+    min-height: 28px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.14);
+    color: rgba(244, 250, 255, 0.97);
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    font-size: clamp(11px, 1.2vw, 12px);
   }
   
   .kicker {
@@ -45,6 +71,13 @@
     letter-spacing: 0.12em;
     text-transform: uppercase;
     opacity: 0.9;
+  }
+
+  .introKickerBlack {
+    color: #101010;
+    font-family: Impact, "Arial Black", "Franklin Gothic Heavy", "Segoe UI", sans-serif;
+    letter-spacing: 0.08em;
+    text-shadow: none;
   }
   
   .h1 {
@@ -55,6 +88,14 @@
     position: relative;
     z-index: 1;
     will-change: clip-path;
+  }
+
+  .introTitleBlack {
+    color: #0b0b0b;
+    font-family: Impact, "Arial Black", "Franklin Gothic Heavy", "Segoe UI", sans-serif;
+    font-weight: 900;
+    letter-spacing: 0.02em;
+    text-shadow: none;
   }
   
   .h2 {
@@ -70,6 +111,16 @@
     max-width: 62ch;
     opacity: 0.95;
     text-shadow: 0 10px 22px rgba(0,0,0,0.35);
+  }
+
+  .introBodyBlack {
+    color: #121212;
+    font-family: "Trebuchet MS", "Franklin Gothic Medium", "Segoe UI", sans-serif;
+    font-weight: 700;
+    text-shadow: none;
+    background: rgba(0, 0, 0, 0.1);
+    padding: 10px 12px;
+    border-radius: 12px;
   }
   
   .hint {
@@ -92,12 +143,24 @@
     transform: rotate(-45deg);
     filter: drop-shadow(0 8px 18px rgba(0,0,0,0.35));
   }
+
+  .introArrowBlack {
+    border-left-color: #101010;
+    border-bottom-color: #101010;
+    filter: none;
+  }
   
   .hintText {
     font-size: 12px;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     opacity: 0.85;
+  }
+
+  .introHintTextBlack {
+    color: #101010;
+    font-family: Impact, "Arial Black", "Franklin Gothic Heavy", "Segoe UI", sans-serif;
+    opacity: 0.95;
   }
   
   /* Placeholder assets */
@@ -158,17 +221,40 @@
   /* Intro "eaten title" mask */
   .titleWrap {
     position: relative;
-    display: inline-block;
+    display: block;
+    padding-left: clamp(72px, 8vw, 116px);
+    margin-top: 10px;
+  }
+
+  .introTitle {
+    max-width: 16ch;
+    margin: 0;
+    color: rgba(248, 252, 255, 0.98);
+    font-weight: 650;
+    letter-spacing: 0.01em;
+    font-size: clamp(36px, 6.2vw, 76px);
+    line-height: 1.02;
+    text-shadow: 0 2px 8px rgba(9, 14, 21, 0.28);
+  }
+
+  .introSubtitle {
+    margin-top: clamp(10px, 1.5vw, 16px);
+    max-width: 46ch;
+    color: rgba(244, 249, 255, 0.92);
+    font-size: clamp(16px, 2.1vw, 22px);
+    line-height: 1.52;
+    text-shadow: 0 1px 6px rgba(11, 17, 25, 0.22);
   }
   
   .introMouse {
     position: absolute;
-    top: 50%;
-    left: -200px;
-    width: clamp(300px, 46vw, 620px);
+    top: 60%;
+    left: clamp(-108px, -7.2vw, -70px);
+    width: clamp(205px, 25.3vw, 311px);
     aspect-ratio: 3 / 2;
     z-index: 3;
-    pointer-events: none;
+    pointer-events: auto;
+    cursor: pointer;
   }
 
   .introMouseFrame {
@@ -193,12 +279,12 @@
   }
 
   .introMouseFrame3 {
-    --mouse-frame-scale: 1.14;
+    --mouse-frame-scale: 1.06;
     --mouse-frame-shift-y: -1%;
   }
 
   .introMouseFrame4 {
-    --mouse-frame-scale: 1.18;
+    --mouse-frame-scale: 1.08;
     --mouse-frame-shift-y: -1%;
   }
   
@@ -213,11 +299,161 @@
     margin-top: 10px;
     width: fit-content;
   }
+
+  .introBadgeBlack {
+    font-size: 14px;
+    opacity: 0.95;
+    color: #111111;
+    font-family: Impact, "Arial Black", "Franklin Gothic Heavy", "Segoe UI", sans-serif;
+    letter-spacing: 0.02em;
+  }
+
+  .introCta {
+    margin-top: 16px;
+    min-height: 44px;
+    padding: 10px 14px;
+    border: 1px solid rgba(255, 255, 255, 0.36);
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.2),
+      rgba(255, 255, 255, 0.1)
+    );
+    color: #f6fbff;
+    cursor: pointer;
+    transition: transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
+    box-shadow: 0 10px 22px rgba(11, 18, 30, 0.26);
+  }
+
+  .introCta:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 12px 24px rgba(11, 18, 30, 0.3);
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.24),
+      rgba(255, 255, 255, 0.12)
+    );
+  }
+
+  .introCta:active {
+    transform: translateY(0);
+  }
+
+  .introCta:focus-visible {
+    outline: 2px solid rgba(245, 251, 255, 0.96);
+    outline-offset: 2px;
+    box-shadow:
+      0 0 0 4px rgba(126, 193, 255, 0.34),
+      0 12px 24px rgba(11, 18, 30, 0.3);
+  }
+
+  .introCtaText {
+    font-size: clamp(14px, 1.7vw, 16px);
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    color: rgba(246, 252, 255, 0.97);
+  }
+
+  .introScrollIcon {
+    position: relative;
+    width: 18px;
+    height: 30px;
+    border: 2px solid rgba(245, 252, 255, 0.92);
+    border-radius: 999px;
+    flex: 0 0 auto;
+  }
+
+  .introScrollThumb {
+    position: absolute;
+    left: 50%;
+    top: 5px;
+    width: 4px;
+    height: 8px;
+    border-radius: 999px;
+    background: rgba(245, 252, 255, 0.95);
+    transform: translateX(-50%);
+    animation: introScrollPulse 1.6s ease-in-out infinite;
+  }
+
+  .introHint {
+    opacity: 0.82;
+  }
   
   .dot {
     width: 10px;
     height: 10px;
     border-radius: 999px;
     background: rgba(255,255,255,0.9);
+  }
+
+  @keyframes introScrollPulse {
+    0% {
+      transform: translate(-50%, 0);
+      opacity: 0.95;
+    }
+
+    55% {
+      transform: translate(-50%, 8px);
+      opacity: 0.5;
+    }
+
+    100% {
+      transform: translate(-50%, 0);
+      opacity: 0.95;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .introContent {
+      align-items: flex-start;
+      padding-top: 34px;
+    }
+
+    .introPanel {
+      width: 100%;
+      border-radius: 20px;
+      padding: 16px 14px 18px;
+    }
+
+    .titleWrap {
+      padding-left: clamp(60px, 16vw, 86px);
+    }
+
+    .introMouse {
+      top: 58%;
+      left: clamp(-62px, -12vw, -28px);
+      width: clamp(161px, 38vw, 230px);
+    }
+
+    .introTitle {
+      font-size: clamp(34px, 10vw, 46px);
+      max-width: 12ch;
+      line-height: 1.04;
+    }
+
+    .introSubtitle {
+      font-size: clamp(16px, 4.5vw, 18px);
+      line-height: 1.45;
+      max-width: 34ch;
+    }
+
+    .introCta {
+      width: 100%;
+      justify-content: center;
+      min-height: 46px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .introCta {
+      transition: none;
+    }
+
+    .introCta:hover {
+      transform: none;
+    }
+
+    .introScrollThumb {
+      animation: none;
+    }
   }
   

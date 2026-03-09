@@ -10,6 +10,30 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function Section00Intro() {
   const rootRef = useRef<HTMLElement | null>(null);
+  const squeakAudioRef = useRef<HTMLAudioElement | null>(null);
+
+  const playRatSqueak = React.useCallback(() => {
+    if (!squeakAudioRef.current) {
+      const audio = new Audio("/sounds/sound_garage-rat-squeaks-2-fx-396301.mp3");
+      audio.preload = "auto";
+      squeakAudioRef.current = audio;
+    }
+
+    const audio = squeakAudioRef.current;
+    audio.currentTime = 0;
+    void audio.play().catch(() => {
+      // Ignore failed playback attempts.
+    });
+  }, []);
+
+  React.useEffect(() => {
+    return () => {
+      if (squeakAudioRef.current) {
+        squeakAudioRef.current.pause();
+        squeakAudioRef.current = null;
+      }
+    };
+  }, []);
 
   React.useLayoutEffect(() => {
     const root = rootRef.current!;
@@ -130,6 +154,7 @@ export default function Section00Intro() {
 
       if (frames.length >= 4) {
         const finalStart = chewStart + chewDuration;
+        const closeLead = Math.max(0.12, chewDuration * 0.14);
         const titleRect = title.getBoundingClientRect();
         const mouseRect = mouse.getBoundingClientRect();
         const startMouthRatioX = frameMouthRatioX[0] ?? 0.58;
@@ -140,9 +165,10 @@ export default function Section00Intro() {
           Math.abs(totalTravelX) < 0.001 ? 0 : (titleRect.left - startMouthX) / totalTravelX;
         const contactProgress = gsap.utils.clamp(0, 1, rawContactProgress);
         const openStart = chewStart + chewDuration * contactProgress;
+        const closeStart = Math.max(openStart + 0.1, finalStart - closeLead);
         const openVariantStart = Math.min(
-          finalStart - 0.02,
-          openStart + Math.max(0.08, (finalStart - openStart) * 0.58)
+          closeStart - 0.02,
+          openStart + Math.max(0.08, (closeStart - openStart) * 0.58)
         );
 
         tl.call(() => {
@@ -168,9 +194,9 @@ export default function Section00Intro() {
         tl.call(() => {
           activeFrameIndex = 3;
           syncTitleBiteWithMouse();
-        }, undefined, finalStart);
-        tl.set(frames[2], { autoAlpha: 0 }, finalStart);
-        tl.set(frames[3], { autoAlpha: 1 }, finalStart);
+        }, undefined, closeStart);
+        tl.set(frames[2], { autoAlpha: 0 }, closeStart);
+        tl.set(frames[3], { autoAlpha: 1 }, closeStart);
       } else {
         const frameDuration = frames.length > 0 ? chewDuration / frames.length : chewDuration;
 
@@ -223,13 +249,26 @@ export default function Section00Intro() {
   return (
     <SectionFrame ref={rootRef} id="section-0" bg="/pueblo-feliz-section1.jpeg">
       <div className={styles.content}>
-        <div className={styles.kicker}>Interactive story</div>
+        <div className={`${styles.kicker} ${styles.introKickerBlack}`}>Historia interactiva</div>
 
         <div className={styles.titleWrap}>
-          <h1 className={styles.h1} data-el="title">
-            The Pied Piper of Hamelin
+          <h1 className={`${styles.h1} ${styles.introTitleBlack}`} data-el="title">
+            El Flautista de Hamelin
           </h1>
-          <div className={styles.introMouse} data-el="mouse">
+          <div
+            className={styles.introMouse}
+            data-el="mouse"
+            role="button"
+            tabIndex={0}
+            aria-label="Reproducir sonido de rata"
+            onClick={playRatSqueak}
+            onKeyDown={(event) => {
+              if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                playRatSqueak();
+              }
+            }}
+          >
             <img
               className={`${styles.photoAsset} ${styles.introMouseFrame} ${styles.introMouseFrameRight} ${styles.introMouseFrame4}`}
               src="/intro/rata-frame4.png"
@@ -265,19 +304,19 @@ export default function Section00Intro() {
           </div>
         </div>
 
-        <p className={styles.p}>
-          Scroll down and watch the story come alive. Friendly music, silly mice, and a lesson about keeping promises.
+        <p className={`${styles.p} ${styles.introBodyBlack}`}>
+          Desliza hacia abajo y mira como la historia cobra vida. Musica alegre, ratones traviesos y una leccion sobre cumplir promesas.
         </p>
 
         <div className={styles.badge}>
           <span className={styles.dot} />
-          <span style={{ fontSize: 14, opacity: 0.95 }}>Scroll to start</span>
+          <span className={styles.introBadgeBlack}>Desliza para comenzar</span>
         </div>
       </div>
 
       <div className={styles.hint} data-el="hint">
-        <div className={styles.arrow} />
-        <div className={styles.hintText}>Scroll</div>
+        <div className={`${styles.arrow} ${styles.introArrowBlack}`} />
+        <div className={`${styles.hintText} ${styles.introHintTextBlack}`}>Desliza</div>
       </div>
     </SectionFrame>
   );

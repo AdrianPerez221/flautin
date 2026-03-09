@@ -13,10 +13,10 @@ const SectionFrame = forwardRef<HTMLElement, Props>(function SectionFrame({ id, 
   return (
     <section ref={ref} id={id} className={styles.section}>
       <div className={styles.bg} style={{ backgroundImage: `url(${bg})` }} />
-      <div className={styles.overlay} />
       {children}
     </section>
   );
 });
 
 export default SectionFrame;
+

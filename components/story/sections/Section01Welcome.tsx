@@ -4,30 +4,107 @@ import React, { useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SectionFrame from "../SectionFrame";
-import PlaceholderAsset from "../PlaceholderAsset";
 import styles from "../story.module.css";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Section01Welcome() {
   const rootRef = useRef<HTMLElement | null>(null);
+  const sunSmallRef = useRef<HTMLImageElement | null>(null);
+  const sunBigRef = useRef<HTMLImageElement | null>(null);
+  const sunExpandedRef = useRef(false);
+  const sunSoundRef = useRef<HTMLAudioElement | null>(null);
+  const sunCooldownUntilRef = useRef(0);
+
+  const handleSunClick = React.useCallback(() => {
+    const now = Date.now();
+    if (now < sunCooldownUntilRef.current) return;
+    sunCooldownUntilRef.current = now + 1000;
+
+    if (!sunSoundRef.current) {
+      const audio = new Audio("/sounds/sonido-de-sol.mp3");
+      audio.preload = "auto";
+      sunSoundRef.current = audio;
+    }
+
+    const sunSound = sunSoundRef.current;
+    sunSound.currentTime = 0;
+    void sunSound.play().catch(() => {
+      // Ignore blocked autoplay attempts.
+    });
+
+    const sunSmall = sunSmallRef.current;
+    const sunBig = sunBigRef.current;
+    if (!sunSmall || !sunBig) return;
+
+    const nextExpanded = !sunExpandedRef.current;
+    sunExpandedRef.current = nextExpanded;
+    gsap.killTweensOf([sunSmall, sunBig]);
+
+    const tl = gsap.timeline();
+
+    if (nextExpanded) {
+      tl.to(sunSmall, {
+        autoAlpha: 0,
+        scale: 0.74,
+        duration: 0.18,
+        ease: "power2.in",
+      });
+      tl.fromTo(
+        sunBig,
+        { autoAlpha: 0, scale: 0.68, rotate: -10, y: -4 },
+        { autoAlpha: 1, scale: 1, rotate: 0, y: 0, duration: 0.28, ease: "back.out(1.8)" },
+        0.1
+      );
+      tl.to(
+        sunBig,
+        { scale: 1.06, duration: 0.12, yoyo: true, repeat: 1, ease: "sine.inOut" },
+        0.38
+      );
+    } else {
+      tl.to(sunBig, {
+        autoAlpha: 0,
+        scale: 0.72,
+        rotate: 8,
+        duration: 0.18,
+        ease: "power2.in",
+      });
+      tl.fromTo(
+        sunSmall,
+        { autoAlpha: 0, scale: 0.86, rotate: -6, y: 2 },
+        { autoAlpha: 1, scale: 1, rotate: 0, y: 0, duration: 0.24, ease: "back.out(1.6)" },
+        0.08
+      );
+    }
+  }, []);
+
+  React.useEffect(() => {
+    return () => {
+      if (sunSoundRef.current) {
+        sunSoundRef.current.pause();
+        sunSoundRef.current = null;
+      }
+    };
+  }, []);
 
   React.useLayoutEffect(() => {
     const root = rootRef.current!;
-    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     const ctx = gsap.context(() => {
       const bg = root.querySelector(`.${styles.bg}`) as HTMLElement;
       const t = root.querySelector('[data-el="text"]') as HTMLElement;
-      const cloud1 = root.querySelector('[data-el="cloud1"]') as HTMLElement;
-      const cloud2 = root.querySelector('[data-el="cloud2"]') as HTMLElement;
-      const birds = root.querySelector('[data-el="birds"]') as HTMLElement;
-      const sign = root.querySelector('[data-el="sign"]') as HTMLElement;
+      const sunSmall = sunSmallRef.current;
+      const sunBig = sunBigRef.current;
 
       gsap.set(t, { y: 18, opacity: 0 });
-      gsap.set([cloud1, cloud2], { x: -120, opacity: 0.95 });
-      gsap.set(birds, { x: 140, y: -10, opacity: 0 });
-      gsap.set(sign, { y: 40, opacity: 0, rotate: -6 });
+      sunExpandedRef.current = false;
+      sunCooldownUntilRef.current = 0;
+      if (sunSmall) {
+        gsap.set(sunSmall, { autoAlpha: 1, scale: 1, rotate: 0, transformOrigin: "50% 50%" });
+      }
+      if (sunBig) {
+        gsap.set(sunBig, { autoAlpha: 0, scale: 0.68, rotate: -10, transformOrigin: "50% 50%" });
+      }
 
       const tl = gsap.timeline({
         scrollTrigger: {
@@ -44,17 +121,6 @@ export default function Section01Welcome() {
 
       // gentle parallax
       tl.to(bg, { scale: 1.08, duration: 1, ease: "none" }, 0);
-
-      tl.to(cloud1, { x: 160, opacity: 1, duration: 1, ease: "none" }, 0);
-      tl.to(cloud2, { x: 220, opacity: 1, duration: 1, ease: "none" }, 0.05);
-
-      tl.to(birds, { x: -220, y: 10, opacity: 1, duration: 1, ease: "none" }, 0.15);
-
-      tl.to(sign, { y: 0, opacity: 1, rotate: 0, duration: 0.35, ease: "back.out(1.6)" }, 0.25);
-
-      if (!prefersReduced) {
-        gsap.to(sign, { rotate: 2, duration: 1.2, yoyo: true, repeat: -1, ease: "sine.inOut" });
-      }
     }, root);
 
     return () => ctx.revert();
@@ -70,26 +136,46 @@ export default function Section01Welcome() {
         </p>
       </div>
 
-      <div data-el="cloud1">
-        <PlaceholderAsset label="PLACEHOLDER: cloud (left)" w={220} h={120} style={{ top: "12%", left: "8%" }} />
-      </div>
-
-      <div data-el="cloud2">
-        <PlaceholderAsset label="PLACEHOLDER: cloud (right)" w={260} h={130} style={{ top: "18%", left: "58%" }} />
-      </div>
-
-      <div data-el="birds">
-        <PlaceholderAsset label="PLACEHOLDER: birds" w={180} h={90} style={{ top: "10%", left: "78%" }} />
-      </div>
-
-      <div data-el="sign">
-        <PlaceholderAsset
-          label="PLACEHOLDER: wooden sign 'Hamelin'"
-          w={260}
-          h={120}
-          style={{ bottom: "14%", left: "10%" }}
+      <div
+        className={styles.clickable}
+        style={{ position: "absolute", top: "9%", left: "56%", width: 156, height: 156, zIndex: 4 }}
+        onClick={handleSunClick}
+        onKeyDown={(event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            handleSunClick();
+          }
+        }}
+        role="button"
+        tabIndex={0}
+        aria-label="Cambiar al sol grande"
+      >
+        <img
+          ref={sunSmallRef}
+          className={styles.photoAsset}
+          src="/presentacion-pueblo/sol-chiquito.png"
+          alt="Sol pequeno"
+          loading="lazy"
+          decoding="async"
+        />
+        <img
+          ref={sunBigRef}
+          className={styles.photoAsset}
+          src="/presentacion-pueblo/sol-grande.png"
+          alt="Sol grande"
+          loading="lazy"
+          decoding="async"
+          style={{
+            position: "absolute",
+            width: "125%",
+            height: "125%",
+            left: "-12.5%",
+            top: "-12.5%",
+          }}
         />
       </div>
+
     </SectionFrame>
   );
 }
+

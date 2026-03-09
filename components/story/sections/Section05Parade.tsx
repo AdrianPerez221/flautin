@@ -4,7 +4,6 @@ import React, { useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SectionFrame from "../SectionFrame";
-import PlaceholderAsset from "../PlaceholderAsset";
 import styles from "../story.module.css";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -12,31 +11,47 @@ gsap.registerPlugin(ScrollTrigger);
 export default function Section05Parade() {
   const rootRef = useRef<HTMLElement | null>(null);
   const coupleRef = useRef<HTMLDivElement | null>(null);
+  const paradeAudioRef = useRef<HTMLAudioElement | null>(null);
 
   React.useLayoutEffect(() => {
     const root = rootRef.current!;
+
+    if (!paradeAudioRef.current) {
+      const audio = new Audio("/sounds/musica-del-parade.mp3");
+      audio.preload = "auto";
+      audio.loop = true;
+      paradeAudioRef.current = audio;
+    }
+
+    const playParadeAudio = () => {
+      const audio = paradeAudioRef.current;
+      if (!audio) return;
+      void audio.play().catch(() => {
+        // Ignore blocked autoplay attempts.
+      });
+    };
+
+    const stopParadeAudio = () => {
+      const audio = paradeAudioRef.current;
+      if (!audio) return;
+      audio.pause();
+      audio.currentTime = 0;
+    };
+
     const ctx = gsap.context(() => {
-      const t = root.querySelector('[data-el="text"]') as HTMLElement;
+      const t = root.querySelector('[data-el="text"]') as HTMLElement | null;
       const piper = root.querySelector('[data-el="piper"]') as HTMLElement;
       const couple = coupleRef.current;
       const miceLine = gsap.utils.toArray<HTMLElement>('[data-el="miceLine"]', root);
-      const notes = gsap.utils.toArray<HTMLElement>('[data-el="note"]', root);
       const offRight = window.innerWidth + 200;
       const offLeft = -400;
 
-      // Initial setup
-      gsap.set(t, { y: 18, opacity: 0 });
-      
+      if (t) {
+        gsap.set(t, { y: 18, opacity: 0 });
+      }
+
       // PIPER LEADS - he's to the LEFT (smaller x) so he enters first and leads
       gsap.set(piper, { x: offRight - 300, opacity: 0 });
-      
-      // Position notes to start from the flute (right side of piper, at head level)
-      gsap.set(notes, { 
-        x: (i) => offRight - 100 - (i * 65), // Closer to flute, tighter spacing
-        y: 0, // Set initial y position
-        opacity: 0, 
-        scale: 0.8 
-      });
       
       // MICE FOLLOW BEHIND - closer to the piper now
       gsap.set(miceLine, { 
@@ -57,12 +72,17 @@ export default function Section05Parade() {
           scrub: true,
           pin: true,
           anticipatePin: 1,
+          onEnter: playParadeAudio,
+          onEnterBack: playParadeAudio,
+          onLeave: stopParadeAudio,
+          onLeaveBack: stopParadeAudio,
         },
       });
 
-      // Fade in text
-      tl.to(t, { y: 0, opacity: 1, duration: 0.25, ease: "power2.out" }, 0.05);
-      
+      if (t) {
+        tl.to(t, { y: 0, opacity: 1, duration: 0.25, ease: "power2.out" }, 0.05);
+      }
+
       // Parade enters from right and crosses to left together - MUCH SLOWER NOW
       // Piper leads (enters first, stays on the left)
       tl.to(piper, { 
@@ -72,18 +92,6 @@ export default function Section05Parade() {
         ease: "none" 
       }, 0.15);
 
-      // Notes flow from the flute as the piper moves
-      tl.to(notes, {
-        x: (i) => offLeft - 100 - (i * 65), // Adjusted to be closer to flute
-        opacity: 1,
-        scale: 1,
-        duration: 2.5, // Increased from 1.2 to 2.5
-        ease: "none",
-      }, 0.15);
-      
-      // Keep notes visible for the rest of the animation
-      tl.to(notes, { opacity: 1 }, "+=0");
-
       // Mice follow behind - closer to piper
       tl.to(miceLine, {
         x: (i) => offLeft + 100 + (i * 240), // Keep same spacing
@@ -92,35 +100,61 @@ export default function Section05Parade() {
         ease: "none",
       }, 0.15);
 
-      // Floating animation for notes (only y-axis to avoid conflict with scrubbed x animation)
-      notes.forEach((el, i) => {
-        // Each note floats up and down gently and smoothly
-        gsap.to(el, { 
-          y: "-=18", 
-          duration: 1.3 + i * 0.12, 
-          yoyo: true, 
-          repeat: -1, 
-          ease: "sine.inOut",
-          delay: i * 0.1 
-        });
-      });
-
       // Gentle dancing sway for the couple
       if (couple) {
         gsap.to(couple, { y: "+=6", rotate: 2, duration: 1.4, yoyo: true, repeat: -1, ease: "sine.inOut" });
       }
     }, root);
 
-    return () => ctx.revert();
+    return () => {
+      stopParadeAudio();
+      ctx.revert();
+    };
   }, []);
 
   return (
     <SectionFrame ref={rootRef as any} id="section-5" bg="/parade/fondo-parade.jpeg">
-      <div className={styles.content} data-el="text">
-        <div className={styles.kicker}>Section 5</div>
-        <h2 className={styles.h2}>Magic music leads the way</h2>
-        <p className={styles.p}>
-          The Piper played a happy tune… and the mice followed him in a silly dancing parade toward the town gate.
+      <div
+        style={{
+          position: "absolute",
+          top: "clamp(-90px, -11vh, -36px)",
+          left: "50%",
+          transform: "translateX(-50%)",
+          width: "clamp(290px, 38vw, 520px)",
+          zIndex: 1,
+          pointerEvents: "none",
+        }}
+      >
+        <img
+          src="/nube-texto.png"
+          alt=""
+          loading="lazy"
+          style={{
+            display: "block",
+            width: "100%",
+            height: "auto",
+          }}
+        />
+        <p
+          style={{
+            position: "absolute",
+            inset: "24% 16% 28% 16%",
+            margin: 0,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            textAlign: "center",
+            fontSize: "clamp(12px, 1.2vw, 20px)",
+            lineHeight: 1.3,
+            fontWeight: 600,
+            color: "#1f2c3e",
+          }}
+        >
+          El flautista toc&oacute; su flauta.
+          <br />
+          La m&uacute;sica era alegre y m&aacute;gica.
+          <br />
+          Los ratones lo siguieron bailando.
         </p>
       </div>
 
@@ -128,7 +162,7 @@ export default function Section05Parade() {
       <div
         data-el="piper"
         className={styles.photoWrap}
-        style={{ bottom: "4%", left: "50%", width: 420, height: 560, zIndex: 3 }}
+        style={{ bottom: "4%", left: "50%", width: 525, height: 700, zIndex: 3 }}
       >
         <img
           className={styles.photoAsset}
@@ -162,7 +196,7 @@ export default function Section05Parade() {
       <div
         data-el="miceLine"
         className={styles.photoWrap}
-        style={{ bottom: "5%", left: "50%", width: 360, height: 240, zIndex: 2 }}
+        style={{ bottom: "5%", left: "50%", width: 450, height: 300, zIndex: 2 }}
       >
         <img
           className={styles.photoAsset}
@@ -174,7 +208,7 @@ export default function Section05Parade() {
       <div
         data-el="miceLine"
         className={styles.photoWrap}
-        style={{ bottom: "5%", left: "50%", width: 360, height: 240, zIndex: 2 }}
+        style={{ bottom: "5%", left: "50%", width: 450, height: 300, zIndex: 2 }}
       >
         <img
           className={styles.photoAsset}
@@ -186,7 +220,7 @@ export default function Section05Parade() {
       <div
         data-el="miceLine"
         className={styles.photoWrap}
-        style={{ bottom: "5%", left: "50%", width: 360, height: 240, zIndex: 2 }}
+        style={{ bottom: "5%", left: "50%", width: 450, height: 300, zIndex: 2 }}
       >
         <img
           className={styles.photoAsset}
@@ -196,43 +230,8 @@ export default function Section05Parade() {
         />
       </div>
 
-      {/* Musical notes flowing from the flute - positioned higher */}
-      <div data-el="note">
-        <PlaceholderAsset 
-          label="♪" 
-          kind="circle" 
-          w={50} 
-          h={50} 
-          style={{ top: "10%", left: "50%", zIndex: 4 }} 
-        />
-      </div>
-      <div data-el="note">
-        <PlaceholderAsset 
-          label="♫" 
-          kind="circle" 
-          w={45} 
-          h={45} 
-          style={{ top: "8%", left: "50%", zIndex: 4 }} 
-        />
-      </div>
-      <div data-el="note">
-        <PlaceholderAsset 
-          label="♪" 
-          kind="circle" 
-          w={48} 
-          h={48} 
-          style={{ top: "12%", left: "50%", zIndex: 4 }} 
-        />
-      </div>
-      <div data-el="note">
-        <PlaceholderAsset 
-          label="♫" 
-          kind="circle" 
-          w={52} 
-          h={52} 
-          style={{ top: "6%", left: "50%", zIndex: 4 }} 
-        />
-      </div>
     </SectionFrame>
   );
 }
+
+

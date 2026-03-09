@@ -4,8 +4,6 @@ import React, { useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SectionFrame from "../SectionFrame";
-import PlaceholderAsset from "../PlaceholderAsset";
-import styles from "../story.module.css";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -15,35 +13,14 @@ export default function Section04Promise() {
   React.useLayoutEffect(() => {
     const root = rootRef.current!;
     const ctx = gsap.context(() => {
-      const t = root.querySelector('[data-el="text"]') as HTMLElement;
-      const handshake = root.querySelector('[data-el="handshake"]') as HTMLElement;
-      const mayor = root.querySelector('[data-el="mayor"]') as HTMLElement;
-      const coinbag = root.querySelector('[data-el="coinbag"]') as HTMLElement;
-
-      gsap.set(t, { y: 18, opacity: 0 });
-      gsap.set(mayor, { x: 180, opacity: 0 });
-      gsap.set(handshake, { scale: 0.9, opacity: 0, y: 24 });
-      gsap.set(coinbag, { y: 24, opacity: 0, rotate: -10 });
-
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: root,
-          start: "top top",
-          end: "+=140%",
-          scrub: true,
-          pin: true,
-          anticipatePin: 1,
-        },
+      ScrollTrigger.create({
+        trigger: root,
+        start: "top top",
+        end: "+=140%",
+        scrub: true,
+        pin: true,
+        anticipatePin: 1,
       });
-
-      tl.to(t, { y: 0, opacity: 1, duration: 0.25, ease: "power2.out" }, 0.05);
-      tl.to(mayor, { x: 0, opacity: 1, duration: 0.45, ease: "power2.out" }, 0.12);
-
-      tl.to(handshake, { opacity: 1, y: 0, scale: 1, duration: 0.35, ease: "back.out(1.6)" }, 0.2);
-      tl.to(coinbag, { opacity: 1, y: 0, rotate: 0, duration: 0.35, ease: "back.out(1.4)" }, 0.28);
-
-      // tiny wiggle to make it cute
-      gsap.to(coinbag, { rotate: 3, duration: 1.1, yoyo: true, repeat: -1, ease: "sine.inOut" });
     }, root);
 
     return () => ctx.revert();
@@ -51,24 +28,48 @@ export default function Section04Promise() {
 
   return (
     <SectionFrame ref={rootRef as any} id="section-4" bg="/flautin-negociando.jpeg">
-      <div className={styles.content} data-el="text">
-        <div className={styles.kicker}>Section 4</div>
-        <h2 className={styles.h2}>A promise is made</h2>
-        <p className={styles.p}>
-          The mayor and the people agreed: “If you help us, we will keep our promise and reward you.”
+      <div
+        style={{
+          position: "absolute",
+          top: "clamp(12px, 4vh, 36px)",
+          left: "clamp(10px, 4vw, 52px)",
+          width: "clamp(360px, 42vw, 620px)",
+          zIndex: 1,
+          pointerEvents: "none",
+        }}
+      >
+        <img
+          src="/nube-texto.png"
+          alt=""
+          loading="lazy"
+          style={{
+            display: "block",
+            width: "100%",
+            height: "auto",
+            transform: "scaleX(-1)",
+          }}
+        />
+        <p
+          style={{
+            position: "absolute",
+            inset: "24% 16% 28% 16%",
+            margin: 0,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            textAlign: "center",
+            fontSize: "clamp(12px, 1.2vw, 20px)",
+            lineHeight: 1.3,
+            fontWeight: 600,
+            color: "#1f2c3e",
+          }}
+        >
+          El flautista dijo:
+          <br />
+          &ldquo;Si quito a los ratones, &iquest;me dar&eacute;is una recompensa?&rdquo;
+          <br />
+          El pueblo dijo que s&iacute;.
         </p>
-      </div>
-
-      <div data-el="mayor">
-        <PlaceholderAsset label="PLACEHOLDER: Mayor (PNG)" w={240} h={380} style={{ bottom: "10%", left: "70%" }} />
-      </div>
-
-      <div data-el="handshake">
-        <PlaceholderAsset label="PLACEHOLDER: handshake moment" w={320} h={200} style={{ bottom: "22%", left: "34%" }} />
-      </div>
-
-      <div data-el="coinbag">
-        <PlaceholderAsset label="PLACEHOLDER: coin pouch" w={160} h={140} style={{ bottom: "12%", left: "44%" }} />
       </div>
     </SectionFrame>
   );
