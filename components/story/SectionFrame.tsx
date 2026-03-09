@@ -6,7 +6,7 @@ import styles from "./story.module.css";
 type Props = {
   id: string;
   bg: string; // /public path
-  children: React.ReactNode;
+  children?: React.ReactNode;
 };
 
 const SectionFrame = forwardRef<HTMLElement, Props>(function SectionFrame({ id, bg, children }, ref) {
