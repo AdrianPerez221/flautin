@@ -129,16 +129,20 @@ export default function Section01Welcome() {
   return (
     <SectionFrame ref={rootRef as any} id="section-1" bg="/pueblo-feliz-section1.jpeg">
       <div className={styles.content} data-el="text">
-        <div className={styles.kicker}>Section 1</div>
-        <h2 className={styles.h2}>Welcome to Hamelin</h2>
-        <p className={styles.p}>
-          Hamelin is a colorful little town. The streets are clean, the fountain sparkles, and everyone feels safe.
-        </p>
+        <div className={styles.section01StoryPanel}>
+          <h2 className={`${styles.h2} ${styles.section01StoryTitle}`}>
+            Había una vez un pueblo llamado Hamelín.
+          </h2>
+          <p className={`${styles.p} ${styles.section01StoryText}`}>
+            Era bonito, con casas de colores y gente amable.
+            A todos les gustaba vivir allí.
+          </p>
+        </div>
       </div>
 
       <div
         className={styles.clickable}
-        style={{ position: "absolute", top: "9%", left: "56%", width: 156, height: 156, zIndex: 4 }}
+        style={{ position: "absolute", top: "9%", left: "56%", width: 195, height: 195, zIndex: 4 }}
         onClick={handleSunClick}
         onKeyDown={(event) => {
           if (event.key === "Enter" || event.key === " ") {

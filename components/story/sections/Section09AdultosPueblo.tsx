@@ -10,8 +10,7 @@ export default function Section09AdultosPueblo() {
         style={{
           position: "absolute",
           top: "clamp(12px, 4vh, 36px)",
-          left: "50%",
-          transform: "translateX(-50%)",
+          left: "clamp(12px, 4vw, 36px)",
           width: "clamp(280px, 34vw, 520px)",
           zIndex: 2,
           pointerEvents: "none",
@@ -21,7 +20,7 @@ export default function Section09AdultosPueblo() {
           src="/nube-texto.png"
           alt=""
           loading="lazy"
-          style={{ display: "block", width: "100%", height: "auto" }}
+          style={{ display: "block", width: "100%", height: "auto", transform: "scaleX(-1)" }}
         />
         <p
           style={{

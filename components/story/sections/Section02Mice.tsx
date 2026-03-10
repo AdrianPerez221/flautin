@@ -4,7 +4,6 @@ import React, { useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SectionFrame from "../SectionFrame";
-import PlaceholderAsset from "../PlaceholderAsset";
 import styles from "../story.module.css";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -99,19 +98,6 @@ export default function Section02Mice() {
       </div>
 
       {/* mice (you’ll replace with real sprites later) */}
-      <div data-el="mouse" data-role="mouse-one">
-        <PlaceholderAsset label="PLACEHOLDER: mouse running #1" kind="circle" w={90} h={90} style={{ bottom: "18%", left: "8%" }} />
-      </div>
-      <div data-el="mouse">
-        <PlaceholderAsset label="PLACEHOLDER: mouse running #2" kind="circle" w={80} h={80} style={{ bottom: "28%", left: "18%" }} />
-      </div>
-      <div data-el="mouse" data-role="mouse-hit">
-        <PlaceholderAsset label="PLACEHOLDER: mouse running #3" kind="circle" w={86} h={86} style={{ bottom: "16%", left: "28%" }} />
-      </div>
-      <div data-el="mouse">
-        <PlaceholderAsset label="PLACEHOLDER: mouse running #4" kind="circle" w={76} h={76} style={{ bottom: "24%", left: "38%" }} />
-      </div>
-
       <div
         data-el="bread"
         className={styles.photoWrap}

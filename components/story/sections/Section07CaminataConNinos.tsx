@@ -10,8 +10,8 @@ export default function Section07CaminataConNinos() {
         style={{
           position: "absolute",
           top: "clamp(12px, 4vh, 36px)",
-          left: "50%",
-          transform: "translateX(-50%)",
+          right: "clamp(12px, 4vw, 36px)",
+          left: "auto",
           width: "clamp(280px, 34vw, 520px)",
           zIndex: 2,
           pointerEvents: "none",
