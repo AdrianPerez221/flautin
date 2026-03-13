@@ -34,24 +34,42 @@ export default function Section08PradoCompleto() {
     });
   }, [handleLaughEnded]);
 
+  const stopLaugh = React.useCallback(() => {
+    const audio = laughAudioRef.current;
+    if (!audio) return;
+    audio.pause();
+    audio.currentTime = 0;
+    laughCooldownRef.current = false;
+  }, []);
+
   React.useEffect(() => {
     const root = rootRef.current;
     if (!root) return;
 
     root.addEventListener("pointerdown", playLaugh);
 
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry || entry.intersectionRatio >= 0.98) return;
+        stopLaugh();
+      },
+      { threshold: [0, 0.98, 1] }
+    );
+
+    observer.observe(root);
+
     return () => {
       root.removeEventListener("pointerdown", playLaugh);
+      observer.disconnect();
+      stopLaugh();
       const audio = laughAudioRef.current;
       if (audio) {
-        audio.pause();
-        audio.currentTime = 0;
         audio.removeEventListener("ended", handleLaughEnded);
       }
       laughAudioRef.current = null;
       laughCooldownRef.current = false;
     };
-  }, [handleLaughEnded, playLaugh]);
+  }, [handleLaughEnded, playLaugh, stopLaugh]);
 
   return (
     <SectionFrame ref={rootRef} id="section-8" bg="/prado-completo/flautista-prado.png">

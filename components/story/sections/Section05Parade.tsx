@@ -21,6 +21,7 @@ export default function Section05Parade() {
       const audio = new Audio("/sounds/musica-del-parade.mp3");
       audio.preload = "auto";
       audio.loop = true;
+      audio.volume = 0.15;
       paradeAudioRef.current = audio;
     }
 
