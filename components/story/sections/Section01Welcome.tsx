@@ -131,11 +131,11 @@ export default function Section01Welcome() {
       <div className={styles.content} data-el="text">
         <div className={styles.section01StoryPanel}>
           <h2 className={`${styles.h2} ${styles.section01StoryTitle}`}>
-            Había una vez un pueblo llamado Hamelín.
+            Hab&iacute;a una vez un pueblo llamado{" "}
+            <span className={styles.section01StoryTitleAccent}>Hamel&iacute;n.</span>
           </h2>
           <p className={`${styles.p} ${styles.section01StoryText}`}>
-            Era bonito, con casas de colores y gente amable.
-            A todos les gustaba vivir allí.
+            Era bonito, con casas de colores y gente amable. A todos les gustaba vivir all&iacute;.
           </p>
         </div>
       </div>
@@ -178,7 +178,6 @@ export default function Section01Welcome() {
           }}
         />
       </div>
-
     </SectionFrame>
   );
 }

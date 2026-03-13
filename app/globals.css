@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Kaushan+Script&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
@@ -131,7 +132,24 @@ html, body {
 
 body {
   background: #0b0f19;
-  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  font-family: "Kaushan Script", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.kaushan-script-regular {
+  font-family: "Kaushan Script", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+
+button,
+input,
+textarea,
+select {
+  font-family: "Kaushan Script", cursive;
+  font-weight: 400;
+  font-style: normal;
 }
 
 * {

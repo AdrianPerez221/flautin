@@ -31,7 +31,7 @@ export default function Section10AdultosSorry() {
             alignItems: "center",
             justifyContent: "center",
             textAlign: "center",
-            fontSize: "clamp(12px, 1.2vw, 20px)",
+            fontSize: "clamp(14px, 1.7vw, 20px)",
             lineHeight: 1.3,
             fontWeight: 600,
             color: "#1f2c3e",
@@ -47,3 +47,4 @@ export default function Section10AdultosSorry() {
     </SectionFrame>
   );
 }
+

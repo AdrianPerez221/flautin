@@ -253,7 +253,8 @@ export default function Section00Intro() {
 
         <div className={styles.titleWrap}>
           <h1 className={`${styles.h1} ${styles.introTitleBlack}`} data-el="title">
-            El Flautista de Hamelin
+            El Flautista de{" "}
+            <span className={styles.section01StoryTitleAccent}>Hamel&iacute;n</span>
           </h1>
           <div
             className={styles.introMouse}

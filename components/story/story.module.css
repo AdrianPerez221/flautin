@@ -75,7 +75,7 @@
 
   .introKickerBlack {
     color: #101010;
-    font-family: Impact, "Arial Black", "Franklin Gothic Heavy", "Segoe UI", sans-serif;
+    font-family: "Kaushan Script", cursive;
     letter-spacing: 0.08em;
     text-shadow: none;
   }
@@ -92,24 +92,29 @@
 
   .introTitleBlack {
     color: #0b0b0b;
-    font-family: Impact, "Arial Black", "Franklin Gothic Heavy", "Segoe UI", sans-serif;
+    font-family: "Kaushan Script", cursive;
     font-weight: 900;
     letter-spacing: 0.02em;
     text-shadow: none;
   }
 
   .section01StoryTitle {
+    color: #111111;
+    text-shadow: none;
+    max-width: 14ch;
+    line-height: 1.05;
+  }
+
+  .section01StoryTitleAccent {
     color: transparent;
     background: linear-gradient(105deg, #ffd56b 0%, #f4a261 35%, #e76f51 70%, #8338ec 100%);
     -webkit-background-clip: text;
     background-clip: text;
     text-shadow: 0 10px 24px rgba(17, 26, 35, 0.35);
-    max-width: 14ch;
-    line-height: 1.05;
   }
 
   .section01StoryText {
-    color: #102437;
+    color: #111111;
     background: transparent;
     border: 0;
     box-shadow: none;
@@ -133,6 +138,18 @@
     border: 1px solid rgba(17, 36, 56, 0.22);
     box-shadow: 0 16px 34px rgba(13, 22, 34, 0.22);
   }
+
+  .introStoryPanel {
+    margin: 0 auto;
+    max-width: min(980px, 94vw);
+    padding: clamp(20px, 3vw, 34px);
+    border-radius: 28px;
+    border: 1px solid rgba(28, 31, 26, 0.2);
+    background: linear-gradient(165deg, rgba(255, 246, 222, 0.9), rgba(255, 255, 255, 0.84));
+    box-shadow: 0 18px 40px rgba(18, 19, 16, 0.22);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+  }
   
   .h2 {
     font-size: clamp(28px, 4vw, 54px);
@@ -151,12 +168,24 @@
 
   .introBodyBlack {
     color: #121212;
-    font-family: "Trebuchet MS", "Franklin Gothic Medium", "Segoe UI", sans-serif;
+    font-family: "Kaushan Script", cursive;
     font-weight: 700;
     text-shadow: none;
     background: rgba(0, 0, 0, 0.1);
     padding: 10px 12px;
     border-radius: 12px;
+  }
+
+  .introBodyPanelText {
+    color: #111111;
+    text-shadow: none;
+    background: none;
+    padding: 0;
+    border-radius: 0;
+    margin: 8px 0 0;
+    max-width: 56ch;
+    line-height: 1.45;
+    font-weight: 600;
   }
   
   .hint {
@@ -195,7 +224,7 @@
 
   .introHintTextBlack {
     color: #101010;
-    font-family: Impact, "Arial Black", "Franklin Gothic Heavy", "Segoe UI", sans-serif;
+    font-family: "Kaushan Script", cursive;
     opacity: 0.95;
   }
   
@@ -340,7 +369,7 @@
     font-size: 14px;
     opacity: 0.95;
     color: #111111;
-    font-family: Impact, "Arial Black", "Franklin Gothic Heavy", "Segoe UI", sans-serif;
+    font-family: "Kaushan Script", cursive;
     letter-spacing: 0.02em;
   }
 

@@ -5,6 +5,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SectionFrame from "../SectionFrame";
 import styles from "../story.module.css";
+import { PARADE_AUDIO_START_EVENT, PARADE_AUDIO_STOP_EVENT } from "../audioEvents";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -26,6 +27,7 @@ export default function Section05Parade() {
     const playParadeAudio = () => {
       const audio = paradeAudioRef.current;
       if (!audio) return;
+      window.dispatchEvent(new Event(PARADE_AUDIO_START_EVENT));
       void audio.play().catch(() => {
         // Ignore blocked autoplay attempts.
       });
@@ -36,6 +38,7 @@ export default function Section05Parade() {
       if (!audio) return;
       audio.pause();
       audio.currentTime = 0;
+      window.dispatchEvent(new Event(PARADE_AUDIO_STOP_EVENT));
     };
 
     const ctx = gsap.context(() => {
@@ -144,7 +147,7 @@ export default function Section05Parade() {
             alignItems: "center",
             justifyContent: "center",
             textAlign: "center",
-            fontSize: "clamp(12px, 1.2vw, 20px)",
+            fontSize: "clamp(14px, 1.7vw, 20px)",
             lineHeight: 1.3,
             fontWeight: 600,
             color: "#1f2c3e",
@@ -233,5 +236,6 @@ export default function Section05Parade() {
     </SectionFrame>
   );
 }
+
 
 

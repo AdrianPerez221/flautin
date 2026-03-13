@@ -4,8 +4,57 @@ import React from "react";
 import SectionFrame from "../SectionFrame";
 
 export default function Section08PradoCompleto() {
+  const rootRef = React.useRef<HTMLElement | null>(null);
+  const laughAudioRef = React.useRef<HTMLAudioElement | null>(null);
+  const laughCooldownRef = React.useRef(false);
+
+  const handleLaughEnded = React.useCallback(() => {
+    laughCooldownRef.current = false;
+  }, []);
+
+  const playLaugh = React.useCallback(() => {
+    if (laughCooldownRef.current) return;
+
+    if (!laughAudioRef.current) {
+      const audio = new Audio("/sounds/magiaz-risada-infantil-447316.mp3");
+      audio.preload = "auto";
+      audio.addEventListener("ended", handleLaughEnded);
+      laughAudioRef.current = audio;
+    }
+
+    const audio = laughAudioRef.current;
+    if (!audio) return;
+
+    laughCooldownRef.current = true;
+    audio.currentTime = 0;
+
+    void audio.play().catch(() => {
+      // If autoplay is blocked, unlock immediately to allow retry.
+      laughCooldownRef.current = false;
+    });
+  }, [handleLaughEnded]);
+
+  React.useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+
+    root.addEventListener("pointerdown", playLaugh);
+
+    return () => {
+      root.removeEventListener("pointerdown", playLaugh);
+      const audio = laughAudioRef.current;
+      if (audio) {
+        audio.pause();
+        audio.currentTime = 0;
+        audio.removeEventListener("ended", handleLaughEnded);
+      }
+      laughAudioRef.current = null;
+      laughCooldownRef.current = false;
+    };
+  }, [handleLaughEnded, playLaugh]);
+
   return (
-    <SectionFrame id="section-8" bg="/prado-completo/flautista-prado.png">
+    <SectionFrame ref={rootRef} id="section-8" bg="/prado-completo/flautista-prado.png">
       <div
         style={{
           position: "absolute",
@@ -32,7 +81,7 @@ export default function Section08PradoCompleto() {
             alignItems: "center",
             justifyContent: "center",
             textAlign: "center",
-            fontSize: "clamp(12px, 1.2vw, 20px)",
+            fontSize: "clamp(14px, 1.7vw, 20px)",
             lineHeight: 1.3,
             fontWeight: 600,
             color: "#1f2c3e",
@@ -48,3 +97,4 @@ export default function Section08PradoCompleto() {
     </SectionFrame>
   );
 }
+
