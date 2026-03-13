@@ -54,8 +54,8 @@ export default function Section05Parade() {
         gsap.set(t, { y: 18, opacity: 0 });
       }
 
-      // PIPER LEADS - he's to the LEFT (smaller x) so he enters first and leads
-      gsap.set(piper, { x: offRight - 300, opacity: 0 });
+      // PIPER LEADS - visible from the first frame while entering
+      gsap.set(piper, { x: offRight - 300, opacity: 1 });
       
       // MICE FOLLOW BEHIND - closer to the piper now
       gsap.set(miceLine, { 
@@ -91,7 +91,6 @@ export default function Section05Parade() {
       // Piper leads (enters first, stays on the left)
       tl.to(piper, { 
         x: offLeft - 300, 
-        opacity: 1, 
         duration: 2.5, // Increased from 1.2 to 2.5 for slower movement
         ease: "none" 
       }, 0.15);
